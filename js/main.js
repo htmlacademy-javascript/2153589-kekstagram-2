@@ -20,7 +20,15 @@ const photoDescriptions = [
 ];
 
 // Список различных имен людей
-const names = ['Виктор', 'Кирилл', 'Игорь', 'Мария', 'Татьяна', 'Наталья', 'Анатолий', 'Ксения'];
+const commentAuthors = {
+  '1': { name: 'Виктор' },
+  '2': { name: 'Кирилл' },
+  '3': { name: 'Игорь' },
+  '4': { name: 'Мария' },
+  '5': { name: 'Татьяна' },
+  '6': { name: 'Наталья' },
+};
+
 
 // Функция - генерация случайного числа в диапазоне
 const getRandomInteger = (min, max) => {
@@ -37,30 +45,17 @@ const getRandomArrayElement = (elements) => elements[getRandomInteger(0, element
 // Функция - генерация уникального id
 const createId = () => {
   let id = 0;
+
   return () => id++;
 };
+
 const createCommentId = createId();
 const createDescriptionId = createId();
-
-// Функция - генерация объекта из списка авторов комментариев
-const createCommentAuthors = (authors, count) => {
-  const obj = {};
-
-  for (let i = 0; i < authors.length; i++) {
-    if (i >= count) {
-      break;
-    }
-
-    obj[i + 1] = { name: authors[i] };
-  }
-
-  return obj;
-};
-const commentAuthors = createCommentAuthors(names, COMMENT_AUTHORS_MAX_COUNT);
 
 // Функция - создание комментария
 const createComment = () => {
   const authorId = getRandomInteger(1, COMMENT_AUTHORS_MAX_COUNT);
+
   return {
     id: createCommentId(),
     avatar: `img/avatar-${authorId}.svg`,
@@ -72,6 +67,7 @@ const createComment = () => {
 // Функция - создание описания фото
 const createPhotoProperties = () => {
   const id = createDescriptionId();
+
   return {
     id,
     url: `photos/${id}.jpg`,
@@ -83,6 +79,7 @@ const createPhotoProperties = () => {
 // Функция - добавление комментариев к объектам-описаниям фото
 const addComments = (photos) => photos.map((photo) => {
   const comments = Array.from({ length: getRandomInteger(1, COMMENTS_MAX_COUNT) }, createComment);
+
   return { ...photo, comments };
 });
 
@@ -90,6 +87,7 @@ const addComments = (photos) => photos.map((photo) => {
 const generatePhotosList = (length) => {
   let photoProperties = Array.from({ length }, createPhotoProperties);
   photoProperties = addComments(photoProperties);
+
   return photoProperties;
 };
 
