@@ -5,14 +5,16 @@ const COMMENTS_MAX_COUNT = 30;
 const COMMENT_AUTHORS_MAX_COUNT = 6;
 
 // Список возможных вариантов текста комментария
-const commentMessages = [
-  'Всё отлично!',
-  'В целом всё неплохо. Но не всё.',
-  'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
-  'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
-  'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
-  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
-];
+const commentMessages = {
+  good: ['Всё отлично!'],
+  neutral: ['В целом всё неплохо. Но не всё.'],
+  bad: [
+    'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально',
+    'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
+    'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
+    'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
+  ]
+};
 
 // Список возможных вариантов описания фото
 const photoDescriptions = [
@@ -55,14 +57,26 @@ const createDescriptionId = createId();
 // Функция - создание комментария
 const createComment = () => {
   const authorId = getRandomInteger(1, COMMENT_AUTHORS_MAX_COUNT);
+  const sentencesCount = getRandomInteger(1, 2);
+  let message = '';
+  const messageKey = getRandomArrayElement(Object.keys(commentMessages));
+
+  switch (messageKey) {
+    case 'neutral':
+      message = (sentencesCount === 2) ? `${commentMessages[messageKey]} ${getRandomArrayElement(commentMessages['bad'])}` : getRandomArrayElement(commentMessages[messageKey]);
+      break;
+    default:
+      message = getRandomArrayElement(commentMessages[messageKey]);
+  }
 
   return {
     id: createCommentId(),
     avatar: `img/avatar-${authorId}.svg`,
-    message: getRandomArrayElement(commentMessages),
+    message,
     name: commentAuthors[authorId]?.name,
   };
 };
+createComment();
 
 // Функция - создание описания фото
 const createPhotoProperties = () => {
@@ -92,3 +106,4 @@ const generatePhotosList = (length) => {
 };
 
 generatePhotosList(DESCRIPTION_MAX_COUNT);
+
