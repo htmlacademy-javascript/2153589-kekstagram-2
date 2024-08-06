@@ -1,6 +1,7 @@
 const DESCRIPTION_MAX_COUNT = 25;
 const LIKES_MIN_COUNT = 15;
 const LIKES_MAX_COUNT = 200;
+const COMMENTS_MIN_COUNT = 0;
 const COMMENTS_MAX_COUNT = 30;
 const COMMENT_AUTHORS_MAX_COUNT = 6;
 
@@ -48,9 +49,10 @@ const getRandomArrayElement = (elements) => elements[getRandomInteger(0, element
 const createId = () => {
   let id = 0;
 
-  return () => id++;
+  return () => ++id;
 };
 
+// Создание уникальных id для различных сущностей
 const createCommentId = createId();
 const createDescriptionId = createId();
 
@@ -76,7 +78,6 @@ const createComment = () => {
     name: commentAuthors[authorId]?.name,
   };
 };
-createComment();
 
 // Функция - создание описания фото
 const createPhotoProperties = () => {
@@ -86,24 +87,13 @@ const createPhotoProperties = () => {
     id,
     url: `photos/${id}.jpg`,
     description: getRandomArrayElement(photoDescriptions),
-    likes: getRandomInteger(LIKES_MIN_COUNT, LIKES_MAX_COUNT)
+    likes: getRandomInteger(LIKES_MIN_COUNT, LIKES_MAX_COUNT),
+    comments: Array.from({ length: getRandomInteger(COMMENTS_MIN_COUNT, COMMENTS_MAX_COUNT) }, createComment)
   };
 };
 
-// Функция - добавление комментариев к объектам-описаниям фото
-const addComments = (photos) => photos.map((photo) => {
-  const comments = Array.from({ length: getRandomInteger(1, COMMENTS_MAX_COUNT) }, createComment);
-
-  return { ...photo, comments };
-});
-
 // Функция - генерация списка описаний фото
-const generatePhotosList = (length) => {
-  let photoProperties = Array.from({ length }, createPhotoProperties);
-  photoProperties = addComments(photoProperties);
-
-  return photoProperties;
-};
+const generatePhotosList = (length) => Array.from({ length }, createPhotoProperties);
 
 generatePhotosList(DESCRIPTION_MAX_COUNT);
 
