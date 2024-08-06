@@ -19,7 +19,20 @@ const commentMessages = {
 
 // Список возможных вариантов описания фото
 const photoDescriptions = [
-  'Момент вечности', 'Ловлю мгновение', 'Красота в каждом кадре', 'Магия момента', 'Мир, созданный изображением', 'История без слов', 'Эмоции в фокусе', 'Одно мгновение, тысячи впечатлений', 'Когда фото говорит больше слов', 'Вдохновение сквозь объектив', 'Мир глазами фотографа', 'Фотография – это язык сердца', 'Моменты, которые запоминаются', 'Фотография, чтобы запомнить'
+  'Момент вечности',
+  'Ловлю мгновение',
+  'Красота в каждом кадре',
+  'Магия момента',
+  'Мир, созданный изображением',
+  'История без слов',
+  'Эмоции в фокусе',
+  'Одно мгновение, тысячи впечатлений',
+  'Когда фото говорит больше слов',
+  'Вдохновение сквозь объектив',
+  'Мир глазами фотографа',
+  'Фотография – это язык сердца',
+  'Моменты, которые запоминаются',
+  'Фотография, чтобы запомнить'
 ];
 
 // Список различных имен людей
@@ -60,16 +73,8 @@ const createDescriptionId = createId();
 const createComment = () => {
   const authorId = getRandomInteger(1, COMMENT_AUTHORS_MAX_COUNT);
   const sentencesCount = getRandomInteger(1, 2);
-  let message = '';
   const messageKey = getRandomArrayElement(Object.keys(commentMessages));
-
-  switch (messageKey) {
-    case 'neutral':
-      message = (sentencesCount === 2) ? `${commentMessages[messageKey]} ${getRandomArrayElement(commentMessages['bad'])}` : getRandomArrayElement(commentMessages[messageKey]);
-      break;
-    default:
-      message = getRandomArrayElement(commentMessages[messageKey]);
-  }
+  const message = (sentencesCount === 2 && messageKey === 'neutral') ? `${commentMessages[messageKey]} ${getRandomArrayElement(commentMessages['bad'])}` : getRandomArrayElement(commentMessages[messageKey]);
 
   return {
     id: createCommentId(),
