@@ -49,4 +49,28 @@ parseNumberFromString(-1); // 1
 parseNumberFromString(1.5); // 15
 parseNumberFromString('00агент 007'); // 7
 
+const isMeetingBeAble = (startDay, endDay, startMeetTime, durationMeeting) => {
+  const [startDayHours, startDayMinutes] = startDay.split(':');
+  const [endDayHours, endDayMinutes] = endDay.split(':');
+  const [startMeetingHours, startMeetingMinutes] = startMeetTime.split(':');
+
+  const startWork = parseInt(startDayHours, 10) * 60 + parseInt(startDayMinutes, 10);
+  const endWork = parseInt(endDayHours, 10) * 60 + parseInt(endDayMinutes, 10);
+  const startMeeting = parseInt(startMeetingHours, 10) * 60 + parseInt(startMeetingMinutes, 10);
+  const endMeeting = startMeeting + durationMeeting;
+
+  if (startMeeting < startWork) {
+    return false;
+  }
+
+  return endMeeting <= endWork;
+
+};
+
+isMeetingBeAble('08:00', '17:30', '14:00', 90); // true
+isMeetingBeAble('8:0', '10:0', '8:0', 120); // true
+isMeetingBeAble('08:00', '14:30', '14:00', 90); // false
+isMeetingBeAble('14:00', '17:30', '08:0', 90); // false
+isMeetingBeAble('8:00', '17:30', '08:00', 900); // false
+
 
