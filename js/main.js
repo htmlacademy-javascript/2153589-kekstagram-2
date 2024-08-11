@@ -1,3 +1,6 @@
 import { generatePhotosList } from './data.js';
+import { renderPictures } from './pictures.js';
 
-generatePhotosList();
+const pictures = generatePhotosList();
+renderPictures(pictures);
+
