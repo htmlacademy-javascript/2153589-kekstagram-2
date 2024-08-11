@@ -1,4 +1,6 @@
-import { pictureFragment } from './pictures.js';
+import { generatePhotosList } from './data.js';
+import { renderPictures } from './pictures.js';
 
-const pictures = document.querySelector('.pictures');
-pictures.append(pictureFragment);
+const pictures = generatePhotosList();
+renderPictures(pictures);
+
