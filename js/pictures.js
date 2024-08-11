@@ -1,7 +1,7 @@
-const renderPictures = (pictureList) => {
-  const pictures = document.querySelector('.pictures');
-  const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const pictures = document.querySelector('.pictures');
+const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
+const renderPictures = (pictureList) => {
   const pictureFragment = document.createDocumentFragment();
 
   pictureList.forEach(({ url, description, likes, comments }) => {
