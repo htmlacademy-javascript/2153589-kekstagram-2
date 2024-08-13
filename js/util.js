@@ -17,9 +17,18 @@ const createId = () => {
   return () => ++id;
 };
 
+// Функция - генерация объекта из массива
+const arrayToObject = (array) =>
+  array.reduce((obj, item) => {
+    obj[item.id] = item;
+    return obj;
+  }, {});
+
 export {
   getRandomInteger,
   getRandomArrayElement,
-  createId
+  createId,
+  arrayToObject
 };
+
 

@@ -4,14 +4,16 @@ const pictureTemplate = document.querySelector('#picture').content.querySelector
 const renderPictures = (pictureList) => {
   const pictureFragment = document.createDocumentFragment();
 
-  pictureList.forEach(({ url, description, likes, comments }) => {
+  pictureList.forEach(({ id, url, description, likes, comments }) => {
     const pictureClone = pictureTemplate.cloneNode(true);
-    const pictureImage = pictureClone.querySelector('.picture__img');
+    const image = pictureClone.querySelector('.picture__img');
 
-    pictureImage.src = url;
-    pictureImage.alt = description;
+    image.src = url;
+    image.alt = description;
     pictureClone.querySelector('.picture__likes').textContent = likes;
     pictureClone.querySelector('.picture__comments').textContent = comments.length;
+    pictureClone.href = url;
+    pictureClone.dataset.id = id;
 
     pictureFragment.append(pictureClone);
   });
