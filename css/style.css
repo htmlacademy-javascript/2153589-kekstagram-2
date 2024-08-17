@@ -1429,3 +1429,8 @@ main {
 .hidden {
   display: none;
 }
+
+.comments-message-empty{
+  text-align: center;
+  align-self: center;
+}
