@@ -58,6 +58,7 @@ const closePictureHandler = () => {
 
 // Функция-обработчик клика по клавише Escape
 function escapeKeydownHandler(evt) {
+  evt.preventDefault();
   if (isEscapeKeyDown(evt)) {
     closePictureHandler();
   }
