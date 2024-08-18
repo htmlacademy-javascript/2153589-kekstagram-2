@@ -1,7 +1,7 @@
 const pictures = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
-const renderPictures = (pictureList) => {
+const renderGallery = (pictureList) => {
   const pictureFragment = document.createDocumentFragment();
 
   pictureList.forEach(({ id, url, description, likes, comments }) => {
@@ -22,7 +22,7 @@ const renderPictures = (pictureList) => {
 };
 
 export {
-  renderPictures
+  renderGallery
 };
 
 

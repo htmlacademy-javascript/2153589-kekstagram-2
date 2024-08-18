@@ -24,11 +24,14 @@ const transformArrayToObject = (array) =>
     return obj;
   }, {});
 
+const isEscapeKeyDown = (evt) => evt.key === 'Escape';
+
 export {
   getRandomInteger,
   getRandomArrayElement,
   createId,
-  transformArrayToObject
+  transformArrayToObject,
+  isEscapeKeyDown
 };
 
 
