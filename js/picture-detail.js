@@ -2,17 +2,23 @@ import { isEscapeKeyDown } from './util';
 
 const gallery = document.querySelector('.pictures');
 const preview = document.querySelector('.big-picture');
-const previewImage = preview.querySelector('.big-picture__img img');
-const previewCaption = preview.querySelector('.social__caption');
-const previewLikes = preview.querySelector('.likes-count');
-const previewTotalComments = preview.querySelector('.social__comment-total-count');
 const previewShownComments = preview.querySelector('.social__comment-shown-count');
 const commentsContainer = preview.querySelector('.social__comments');
 const commentTemplate = commentsContainer.querySelector('.social__comment');
 const closeButton = document.querySelector('.big-picture__cancel');
 const commentCountContainer = preview.querySelector('.social__comment-count');
 const commentsLoader = preview.querySelector('.comments-loader');
-let addCommentsHandler = null;
+
+let comments = [];
+const commentsStep = 5;
+
+// Функция получения потомков preview
+const getPreviewChildren = () => ({
+  previewImage: preview.querySelector('.big-picture__img img'),
+  previewCaption: preview.querySelector('.social__caption'),
+  previewLikes: preview.querySelector('.likes-count'),
+  previewTotalComments: preview.querySelector('.social__comment-total-count')
+});
 
 // Функция по созданию комментария
 const createCommenNode = (comment) => {
@@ -24,28 +30,40 @@ const createCommenNode = (comment) => {
   return node;
 };
 
-// Функция по отрисовке списка комментариев
-const renderComments = (commentList, start = 0, commentsStep = 5) => () => {
-  if (commentList.length === 0) {
-    commentsContainer.innerHTML = '<p class="comments-message-empty">Комментариев нет</p>';
-    commentCountContainer.classList.add('hidden');
-    commentsLoader.classList.add('hidden');
-    return;
-  }
-  commentsContainer.innerHTML = '';
-  commentCountContainer.classList.remove('hidden');
-  start = (commentsContainer.children.length + start) >= commentList.length ? commentList.length : start + commentsStep;
+// Функция по созданию списка комментариев
+const createCommentList = (start, end) => {
   const commentFragment = document.createDocumentFragment();
 
-  commentList.slice(0, start).forEach((item) => {
+  comments.slice(start, end).forEach((item) => {
     const comment = createCommenNode(item);
     commentFragment.append(comment);
   });
 
   commentsContainer.append(commentFragment);
+};
+
+// Функция по отрисовке контента при отсутствии комментариев
+const setNoCommentsContent = () => {
+  commentsContainer.innerHTML = '<p class="comments-message-empty">Комментариев нет</p>';
+  commentCountContainer.classList.add('hidden');
+  commentsLoader.classList.add('hidden');
+};
+
+// Функция по отрисовке списка комментариев
+const renderComments = () => {
+  if (comments.length === 0) {
+    setNoCommentsContent();
+    return;
+  }
+
+  const prevLegth = commentsContainer.children.length;
+  commentCountContainer.classList.remove('hidden');
+  const end = (prevLegth + commentsStep) >= comments.length ? comments.length : prevLegth + commentsStep;
+
+  createCommentList(prevLegth, end);
   previewShownComments.textContent = commentsContainer.children.length;
 
-  if (commentsContainer.children.length >= commentList.length) {
+  if (commentsContainer.children.length >= comments.length) {
     commentsLoader.classList.add('hidden');
   } else {
     commentsLoader.classList.remove('hidden');
@@ -53,39 +71,45 @@ const renderComments = (commentList, start = 0, commentsStep = 5) => () => {
 };
 
 // Функция закрытия полноэкранного изображения фото
-const closePictureHandler = () => {
+const closePreview = () => {
   preview.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  closeButton.removeEventListener('click', closePictureHandler);
+  commentsContainer.innerHTML = '';
+  closeButton.removeEventListener('click', closePreview);
   document.removeEventListener('keydown', escapeKeydownHandler);
-  commentsLoader.removeEventListener('click', addCommentsHandler);
+  commentsLoader.removeEventListener('click', renderComments);
 };
 
 // Функция-обработчик клика по клавише Escape
 function escapeKeydownHandler(evt) {
   evt.preventDefault();
   if (isEscapeKeyDown(evt)) {
-    closePictureHandler();
+    closePreview();
   }
 }
 
+// Функция по установке общих параметров при вызове полноэкранного изображения
+const setPreviewFeatures = () => {
+  preview.classList.remove('hidden');
+  commentsContainer.innerHTML = '';
+  document.body.classList.add('modal-open');
+  closeButton.addEventListener('click', closePreview);
+  document.addEventListener('keydown', escapeKeydownHandler);
+};
+
 // Функция по созданию контента при полноэкраном отображении фото
 const createBigPicture = (pictureData) => {
-  preview.classList.remove('hidden');
-  commentsLoader.classList.remove('hidden');
-  commentsContainer.innerHTML = '';
+  const { previewImage, previewCaption, previewLikes, previewTotalComments } = getPreviewChildren();
+
+  setPreviewFeatures();
   previewImage.src = pictureData.url;
   previewCaption.textContent = pictureData.description;
   previewLikes.textContent = pictureData.likes;
   previewTotalComments.textContent = pictureData.comments.length;
+  comments = [...pictureData.comments];
 
-  addCommentsHandler = renderComments(pictureData.comments);
-  addCommentsHandler();
-  commentsLoader.addEventListener('click', addCommentsHandler);
-
-  document.body.classList.add('modal-open');
-  closeButton.addEventListener('click', closePictureHandler);
-  document.addEventListener('keydown', escapeKeydownHandler);
+  renderComments();
+  commentsLoader.addEventListener('click', renderComments);
 };
 
 // Функция по создания обработчика для полноэкранного показа фото
