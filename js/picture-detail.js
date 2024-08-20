@@ -92,12 +92,10 @@ const createBigPicture = (pictureData) => {
 const renderPreview = (keyPictureData) => {
   gallery.addEventListener('click', (evt) => {
     const parent = evt.target.closest('.picture');
-    if (parent) {
-      evt.preventDefault();// ЕСЛИ УБРАТЬ ИЗ БЛОКА IF, ПРОПАДАЕТ СТАНДАРТНОЕ ПОВЕДЕНИЕ INPUT-TYPE-FILE
-    } else {
+    if (!parent) {
       return;
     }
-
+    evt.preventDefault();
     const targetId = parent.dataset.id;
 
     if (!targetId) {
