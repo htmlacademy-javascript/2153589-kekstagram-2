@@ -1,12 +1,17 @@
 import { isEscapeKeyDown } from './util';
 
-const picture = document.querySelector('.big-picture');
-const commentsContainer = picture.querySelector('.social__comments');
+const gallery = document.querySelector('.pictures');
+const preview = document.querySelector('.big-picture');
+const previewImage = preview.querySelector('.big-picture__img img');
+const previewCaption = preview.querySelector('.social__caption');
+const previewLikes = preview.querySelector('.likes-count');
+const previewTotalComments = preview.querySelector('.social__comment-total-count');
+const previewShownComments = preview.querySelector('.social__comment-shown-count');
+const commentsContainer = preview.querySelector('.social__comments');
 const commentTemplate = commentsContainer.querySelector('.social__comment');
 const closeButton = document.querySelector('.big-picture__cancel');
-const gallery = document.querySelector('.pictures');
-const commentCountContainer = picture.querySelector('.social__comment-count');
-const commentsLoader = picture.querySelector('.comments-loader');
+const commentCountContainer = preview.querySelector('.social__comment-count');
+const commentsLoader = preview.querySelector('.comments-loader');
 let addCommentsHandler = null;
 
 // Функция по созданию комментария
@@ -38,7 +43,7 @@ const renderComments = (commentList, start = 0, commentsStep = 5) => () => {
   });
 
   commentsContainer.append(commentFragment);
-  picture.querySelector('.social__comment-shown-count').textContent = commentsContainer.children.length;
+  previewShownComments.textContent = commentsContainer.children.length;
 
   if (commentsContainer.children.length >= commentList.length) {
     commentsLoader.classList.add('hidden');
@@ -49,7 +54,7 @@ const renderComments = (commentList, start = 0, commentsStep = 5) => () => {
 
 // Функция закрытия полноэкранного изображения фото
 const closePictureHandler = () => {
-  picture.classList.add('hidden');
+  preview.classList.add('hidden');
   document.body.classList.remove('modal-open');
   closeButton.removeEventListener('click', closePictureHandler);
   document.removeEventListener('keydown', escapeKeydownHandler);
@@ -66,13 +71,13 @@ function escapeKeydownHandler(evt) {
 
 // Функция по созданию контента при полноэкраном отображении фото
 const createBigPicture = (pictureData) => {
-  picture.classList.remove('hidden');
+  preview.classList.remove('hidden');
   commentsLoader.classList.remove('hidden');
   commentsContainer.innerHTML = '';
-  picture.querySelector('.big-picture__img img').src = pictureData.url;
-  picture.querySelector('.social__caption').textContent = pictureData.description;
-  picture.querySelector('.likes-count').textContent = pictureData.likes;
-  picture.querySelector('.social__comment-total-count').textContent = pictureData.comments.length;
+  previewImage.src = pictureData.url;
+  previewCaption.textContent = pictureData.description;
+  previewLikes.textContent = pictureData.likes;
+  previewTotalComments.textContent = pictureData.comments.length;
 
   addCommentsHandler = renderComments(pictureData.comments);
   addCommentsHandler();
