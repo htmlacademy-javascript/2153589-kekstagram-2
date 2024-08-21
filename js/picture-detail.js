@@ -21,7 +21,7 @@ const getPreviewChildren = () => ({
 });
 
 // Функция по созданию комментария
-const createCommenNode = (comment) => {
+const createCommentNode = (comment) => {
   const node = commentTemplate.cloneNode(true);
   const image = node.querySelector('.social__picture');
   image.src = comment.avatar;
@@ -35,7 +35,7 @@ const createCommentList = (start, end) => {
   const commentFragment = document.createDocumentFragment();
 
   comments.slice(start, end).forEach((item) => {
-    const comment = createCommenNode(item);
+    const comment = createCommentNode(item);
     commentFragment.append(comment);
   });
 
@@ -74,7 +74,6 @@ const renderComments = () => {
 const closePreview = () => {
   preview.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  commentsContainer.innerHTML = '';
   closeButton.removeEventListener('click', closePreview);
   document.removeEventListener('keydown', escapeKeydownHandler);
   commentsLoader.removeEventListener('click', renderComments);
