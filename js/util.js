@@ -17,9 +17,21 @@ const createId = () => {
   return () => ++id;
 };
 
+// Функция - генерация объекта из массива
+const transformArrayToObject = (array) =>
+  array.reduce((obj, item) => {
+    obj[item.id] = item;
+    return obj;
+  }, {});
+
+const isEscapeKeyDown = (evt) => evt.key === 'Escape';
+
 export {
   getRandomInteger,
   getRandomArrayElement,
-  createId
+  createId,
+  transformArrayToObject,
+  isEscapeKeyDown
 };
+
 

@@ -1,6 +1,10 @@
+import { transformArrayToObject } from './util.js';
 import { generatePhotosList } from './data.js';
-import { renderPictures } from './pictures.js';
+import { renderGallery } from './gallery.js';
+import { renderPreview } from './picture-detail.js';
 
 const pictures = generatePhotosList();
-renderPictures(pictures);
+renderGallery(pictures);
+renderPreview(transformArrayToObject(pictures));
+
 
