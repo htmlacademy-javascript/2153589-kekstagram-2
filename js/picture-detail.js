@@ -1,4 +1,4 @@
-import { isEscapeKeyDown } from './util';
+import { isEscapeKeydown } from './util';
 
 const gallery = document.querySelector('.pictures');
 const preview = document.querySelector('.big-picture');
@@ -27,6 +27,7 @@ const createCommentNode = (comment) => {
   image.src = comment.avatar;
   image.alt = comment.name;
   node.querySelector('.social__text').textContent = comment.message;
+
   return node;
 };
 
@@ -53,11 +54,13 @@ const setNoCommentsContent = () => {
 const renderComments = () => {
   if (comments.length === 0) {
     setNoCommentsContent();
+
     return;
   }
 
   const prevLegth = commentsContainer.children.length;
   commentCountContainer.classList.remove('hidden');
+
   const end = (prevLegth + commentsStep) >= comments.length ? comments.length : prevLegth + commentsStep;
 
   createCommentList(prevLegth, end);
@@ -75,14 +78,14 @@ const closePreview = () => {
   preview.classList.add('hidden');
   document.body.classList.remove('modal-open');
   closeButton.removeEventListener('click', closePreview);
-  document.removeEventListener('keydown', escapeKeydownHandler);
+  document.removeEventListener('keydown', onEscapeKeydown);
   commentsLoader.removeEventListener('click', renderComments);
 };
 
 // Функция-обработчик клика по клавише Escape
-function escapeKeydownHandler(evt) {
+function onEscapeKeydown(evt) {
   evt.preventDefault();
-  if (isEscapeKeyDown(evt)) {
+  if (isEscapeKeydown(evt)) {
     closePreview();
   }
 }
@@ -93,7 +96,7 @@ const setPreviewFeatures = () => {
   commentsContainer.innerHTML = '';
   document.body.classList.add('modal-open');
   closeButton.addEventListener('click', closePreview);
-  document.addEventListener('keydown', escapeKeydownHandler);
+  document.addEventListener('keydown', onEscapeKeydown);
 };
 
 // Функция по созданию контента при полноэкраном отображении фото
