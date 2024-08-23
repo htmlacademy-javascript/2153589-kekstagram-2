@@ -73,13 +73,18 @@ const renderComments = () => {
 const closePreview = () => {
   preview.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  closeButton.removeEventListener('click', closePreview);
-  document.removeEventListener('keydown', onEscapeKeydown);
+  closeButton.removeEventListener('click', onButtonResetClick);
+  document.removeEventListener('keydown', onDocumentEscapeKeydown);
   commentsLoader.removeEventListener('click', renderComments);
 };
 
+function onButtonResetClick(evt) {
+  evt.preventDefault();
+  closePreview();
+}
+
 // Функция-обработчик клика по клавише Escape
-function onEscapeKeydown(evt) {
+function onDocumentEscapeKeydown(evt) {
   evt.preventDefault();
 
   if (isEscapeKeydown(evt)) {
@@ -92,8 +97,8 @@ const setPreviewFeatures = () => {
   preview.classList.remove('hidden');
   commentsContainer.innerHTML = '';
   document.body.classList.add('modal-open');
-  closeButton.addEventListener('click', closePreview);
-  document.addEventListener('keydown', onEscapeKeydown);
+  closeButton.addEventListener('click', onButtonResetClick);
+  document.addEventListener('keydown', onDocumentEscapeKeydown);
 };
 
 // Функция по созданию контента при полноэкранном отображении фото
