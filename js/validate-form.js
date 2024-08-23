@@ -32,7 +32,7 @@ const validateHashtag = (value) => {
     return true;
   }
 
-  const valueToArray = value.split(' ');
+  const valueToArray = value.toLowerCase().split(' ');
   const isValidHashtag = valueToArray.every((item) => regHashtag.test(item));
 
   if (!isValidHashtag) {
