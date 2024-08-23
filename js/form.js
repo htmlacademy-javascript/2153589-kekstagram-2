@@ -1,4 +1,5 @@
 import { isEscapeKeydown } from './util.js';
+import { cancelValidate } from './validate-form.js';
 
 const imageUploadInput = document.querySelector('.img-upload__input');
 const imageUploadOverlay = document.querySelector('.img-upload__overlay');
@@ -11,6 +12,7 @@ const closeUploadForm = () => {
   imageUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   imageUploadInput.value = '';
+  cancelValidate();
   imageUploadCancel.removeEventListener('click', onButtonResetClick);
   document.removeEventListener('keydown', onDocumentEscapeKeydown);
 };

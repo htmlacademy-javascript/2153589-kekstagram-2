@@ -1,4 +1,4 @@
-import { isEscapeKeydown } from './util';
+import { isEscapeKeydown } from './util.js';
 
 const gallery = document.querySelector('.pictures');
 const closeButton = document.querySelector('.big-picture__cancel');
@@ -81,6 +81,7 @@ const closePreview = () => {
 // Функция-обработчик клика по клавише Escape
 function onEscapeKeydown(evt) {
   evt.preventDefault();
+
   if (isEscapeKeydown(evt)) {
     closePreview();
   }
