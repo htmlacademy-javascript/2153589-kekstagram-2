@@ -15,6 +15,7 @@ const closeUploadForm = () => {
   cancelValidate();
   imageUploadCancel.removeEventListener('click', onButtonResetClick);
   document.removeEventListener('keydown', onDocumentEscapeKeydown);
+  hashtagInput.removeEventListener('input', onHashtagInputEvent);
 };
 
 const openUploadForm = () => {
@@ -22,6 +23,15 @@ const openUploadForm = () => {
   document.body.classList.add('modal-open');
   imageUploadCancel.addEventListener('click', onButtonResetClick);
   document.addEventListener('keydown', onDocumentEscapeKeydown);
+  hashtagInput.addEventListener('input', onHashtagInputEvent);
+};
+
+const limitHashtagSpaces = () => {
+  if (hashtagInput.value.charAt(0) === ' ') {
+    hashtagInput.value = '';
+  }
+
+  hashtagInput.value = hashtagInput.value.replace(/\s{2,}$/, ' ');
 };
 
 function onButtonResetClick(evt) {
@@ -40,8 +50,11 @@ function onDocumentEscapeKeydown(evt) {
       uploadForm.reset();
       closeUploadForm();
     }
-
   }
+}
+
+function onHashtagInputEvent() {
+  limitHashtagSpaces();
 }
 
 const initUploadForm = () => imageUploadInput.addEventListener('change', openUploadForm);
