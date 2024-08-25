@@ -1,6 +1,7 @@
 import { isEscapeKeydown } from './util.js';
 import { cancelValidate } from './validate-form.js';
 import { increaseImage, decreaseImage } from './scale-image.js';
+import { createRadioListeners, deleteRadioListeners, setInitialFeatures } from './image-effects.js';
 
 const imageUploadInput = document.querySelector('.img-upload__input');
 const imageUploadOverlay = document.querySelector('.img-upload__overlay');
@@ -12,6 +13,7 @@ const scaleControlSmallerButton = document.querySelector('.scale__control--small
 const scaleControlBiggerButton = document.querySelector('.scale__control--bigger');
 const scaleControlValueInput = document.querySelector('.scale__control--value');
 const previewImage = document.querySelector('.img-upload__preview img');
+const effectButtons = document.querySelectorAll('.effects__radio');
 
 const onButtonBiggerClick = () => {
   increaseImage(scaleControlValueInput, previewImage);
@@ -30,6 +32,7 @@ const closeUploadForm = () => {
   hashtagInput.removeEventListener('input', onHashtagInputEvent);
   scaleControlSmallerButton.removeEventListener('click', onButtonSmallerClick);
   scaleControlBiggerButton.removeEventListener('click', onButtonBiggerClick);
+  deleteRadioListeners(effectButtons);
 };
 
 const openUploadForm = () => {
@@ -40,6 +43,8 @@ const openUploadForm = () => {
   hashtagInput.addEventListener('input', onHashtagInputEvent);
   scaleControlSmallerButton.addEventListener('click', onButtonSmallerClick);
   scaleControlBiggerButton.addEventListener('click', onButtonBiggerClick);
+  setInitialFeatures();
+  createRadioListeners(effectButtons);
 };
 
 const limitHashtagSpaces = () => {
