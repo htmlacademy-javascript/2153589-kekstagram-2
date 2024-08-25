@@ -719,6 +719,10 @@ main {
   position: relative;
 }
 
+.img-upload__field-wrapper--warning {
+  background-color: #ffa161;
+}
+
 
 /**
  * Кнопка для отправки изображения

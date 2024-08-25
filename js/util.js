@@ -24,6 +24,9 @@ const transformArrayToObject = (array) =>
     return obj;
   }, {});
 
+// Функция проверки на  дубликаты в массиве
+const hasDuplicates = (arr) => arr.length !== new Set(arr).size;
+
 const isEscapeKeydown = (evt) => evt.key === 'Escape';
 
 export {
@@ -31,7 +34,8 @@ export {
   getRandomArrayElement,
   createId,
   transformArrayToObject,
-  isEscapeKeydown
+  isEscapeKeydown,
+  hasDuplicates
 };
 
 
