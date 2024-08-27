@@ -1,7 +1,7 @@
-import { isEscapeKeydown } from './util.js';
+import { isEscapeKeydown, resetScale } from './util.js';
 import { cancelValidate } from './validate-form.js';
 import { increaseImage, decreaseImage } from './scale-image.js';
-import { createRadioListeners, deleteRadioListeners, setInitialFeatures } from './image-effects.js';
+import { setRadioListeners, deleteRadioListeners, setInitialFeatures } from './image-effects.js';
 
 const imageUploadInput = document.querySelector('.img-upload__input');
 const imageUploadOverlay = document.querySelector('.img-upload__overlay');
@@ -33,6 +33,7 @@ const closeUploadForm = () => {
   scaleControlSmallerButton.removeEventListener('click', onButtonSmallerClick);
   scaleControlBiggerButton.removeEventListener('click', onButtonBiggerClick);
   deleteRadioListeners(effectButtons);
+  resetScale(previewImage, scaleControlValueInput);
 };
 
 const openUploadForm = () => {
@@ -44,7 +45,7 @@ const openUploadForm = () => {
   scaleControlSmallerButton.addEventListener('click', onButtonSmallerClick);
   scaleControlBiggerButton.addEventListener('click', onButtonBiggerClick);
   setInitialFeatures();
-  createRadioListeners(effectButtons);
+  setRadioListeners(effectButtons);
 };
 
 const limitHashtagSpaces = () => {

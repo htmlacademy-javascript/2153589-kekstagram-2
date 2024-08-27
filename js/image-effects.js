@@ -1,11 +1,14 @@
+import { resetScale } from './util.js';
+
 const effectLevelInput = document.querySelector('.effect-level__value');
 const previewImage = document.querySelector('.img-upload__preview img');
 const sliderElement = document.querySelector('.effect-level__slider');
 const sliderElementContainer = document.querySelector('.img-upload__effect-level');
+const scaleControlValueInput = document.querySelector('.scale__control--value');
 
-let effectChoice = 'none';
+let currentEffect = 'none';
 
-const effects = {
+const EFFECTS = {
   chrome: {
     min: 0,
     max: 1,
@@ -95,34 +98,28 @@ const createImageEffect = (value) => {
   previewImage.style.filter = `${value}`;
 };
 
-const changeImageEffect = (elem) => {
-  if (elem.checked) {
-    effectChoice = elem.value;
-
-    if (effectChoice !== 'none') {
-      const { min, max, step, start, getEffect } = effects[effectChoice];
-      hideSlider(false);
-      changeSliderFeatures(min, max, step, start);
-      createImageEffect(getEffect(start));
-      effectLevelInput.value = start;
-    } else {
-      setInitialFeatures();
-    }
-
-  }
-};
-
 const onEffectButtonChange = (evt) => {
-  evt.preventDefault();
-  changeImageEffect(evt.target);
+  currentEffect = evt.target.value;
+  resetScale(previewImage, scaleControlValueInput);
+
+  if (currentEffect === 'none') {
+    setInitialFeatures();
+    return;
+  }
+
+  const { min, max, step, start, getEffect } = EFFECTS[currentEffect];
+  hideSlider(false);
+  changeSliderFeatures(min, max, step, start);
+  createImageEffect(getEffect(start));
+  effectLevelInput.value = start;
 };
 
 sliderElement.noUiSlider.on('update', () => {
   effectLevelInput.value = sliderElement.noUiSlider.get();
-  createImageEffect(effects[effectChoice]?.getEffect(effectLevelInput.value));
+  createImageEffect(EFFECTS[currentEffect]?.getEffect(effectLevelInput.value));
 });
 
-const createRadioListeners = (elements) => {
+const setRadioListeners = (elements) => {
   elements.forEach((button) => {
     button.addEventListener('change', onEffectButtonChange);
   });
@@ -134,11 +131,9 @@ const deleteRadioListeners = (elements) => {
   });
 };
 
-setInitialFeatures();
-
 export {
   setInitialFeatures,
-  createRadioListeners,
+  setRadioListeners,
   deleteRadioListeners
 };
 
