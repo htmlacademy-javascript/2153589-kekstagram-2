@@ -1,5 +1,7 @@
-import { isEscapeKeydown } from './util.js';
+import { isEscapeKeydown, resetScale } from './util.js';
 import { cancelValidate } from './validate-form.js';
+import { increaseImage, decreaseImage } from './scale-image.js';
+import { setRadioListeners, deleteRadioListeners, setInitialFeatures } from './image-effects.js';
 
 const imageUploadInput = document.querySelector('.img-upload__input');
 const imageUploadOverlay = document.querySelector('.img-upload__overlay');
@@ -7,6 +9,18 @@ const imageUploadCancel = document.querySelector('.img-upload__cancel');
 const uploadForm = document.querySelector('#upload-select-image');
 const hashtagInput = document.querySelector('.text__hashtags');
 const commentInput = document.querySelector('.text__description');
+const scaleControlSmallerButton = document.querySelector('.scale__control--smaller');
+const scaleControlBiggerButton = document.querySelector('.scale__control--bigger');
+const scaleControlValueInput = document.querySelector('.scale__control--value');
+const previewImage = document.querySelector('.img-upload__preview img');
+const effectButtons = document.querySelectorAll('.effects__radio');
+
+const onButtonBiggerClick = () => {
+  increaseImage(scaleControlValueInput, previewImage);
+};
+const onButtonSmallerClick = () => {
+  decreaseImage(scaleControlValueInput, previewImage);
+};
 
 const closeUploadForm = () => {
   imageUploadOverlay.classList.add('hidden');
@@ -16,6 +30,10 @@ const closeUploadForm = () => {
   imageUploadCancel.removeEventListener('click', onButtonResetClick);
   document.removeEventListener('keydown', onDocumentEscapeKeydown);
   hashtagInput.removeEventListener('input', onHashtagInputEvent);
+  scaleControlSmallerButton.removeEventListener('click', onButtonSmallerClick);
+  scaleControlBiggerButton.removeEventListener('click', onButtonBiggerClick);
+  deleteRadioListeners(effectButtons);
+  resetScale(previewImage, scaleControlValueInput);
 };
 
 const openUploadForm = () => {
@@ -24,6 +42,10 @@ const openUploadForm = () => {
   imageUploadCancel.addEventListener('click', onButtonResetClick);
   document.addEventListener('keydown', onDocumentEscapeKeydown);
   hashtagInput.addEventListener('input', onHashtagInputEvent);
+  scaleControlSmallerButton.addEventListener('click', onButtonSmallerClick);
+  scaleControlBiggerButton.addEventListener('click', onButtonBiggerClick);
+  setInitialFeatures();
+  setRadioListeners(effectButtons);
 };
 
 const limitHashtagSpaces = () => {

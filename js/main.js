@@ -4,6 +4,7 @@ import { renderGallery } from './gallery.js';
 import { renderPreview } from './picture-detail.js';
 import { initUploadForm } from './form.js';
 import { validateUploadForm } from './validate-form.js';
+import './image-effects.js';
 
 const pictures = generatePhotosList();
 renderGallery(pictures);

@@ -29,13 +29,21 @@ const hasDuplicates = (arr) => arr.length !== new Set(arr).size;
 
 const isEscapeKeydown = (evt) => evt.key === 'Escape';
 
+const resetScale = (elem, input, value = '100%') => {
+  elem.style.transform = 'scale(1)';
+  if (input) {
+    input.value = value;
+  }
+};
+
 export {
   getRandomInteger,
   getRandomArrayElement,
   createId,
   transformArrayToObject,
   isEscapeKeydown,
-  hasDuplicates
+  hasDuplicates,
+  resetScale
 };
 
 
