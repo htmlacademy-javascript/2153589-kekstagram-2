@@ -34,6 +34,7 @@ const closeUploadForm = () => {
   scaleControlBiggerButton.removeEventListener('click', onButtonBiggerClick);
   deleteRadioListeners(effectButtons);
   resetScale(previewImage, scaleControlValueInput);
+  setInitialFeatures();
 };
 
 const openUploadForm = () => {
@@ -44,7 +45,6 @@ const openUploadForm = () => {
   hashtagInput.addEventListener('input', onHashtagInputEvent);
   scaleControlSmallerButton.addEventListener('click', onButtonSmallerClick);
   scaleControlBiggerButton.addEventListener('click', onButtonBiggerClick);
-  setInitialFeatures();
   setRadioListeners(effectButtons);
 };
 
