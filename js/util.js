@@ -36,6 +36,8 @@ const resetScale = (elem, input, value = '100%') => {
   }
 };
 
+const createNotificationNode = (element) => element.cloneNode(true);
+
 export {
   getRandomInteger,
   getRandomArrayElement,
@@ -43,7 +45,8 @@ export {
   transformArrayToObject,
   isEscapeKeydown,
   hasDuplicates,
-  resetScale
+  resetScale,
+  createNotificationNode
 };
 
 

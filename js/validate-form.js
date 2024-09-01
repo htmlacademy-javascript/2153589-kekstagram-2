@@ -1,6 +1,10 @@
 import { hasDuplicates } from './util.js';
+import { sendData } from './api.js';
+import { onUploadFail, onUploadSuccess } from './notifications.js';
+import { setInitialFeatures } from './image-effects.js';
 
 const uploadImageForm = document.querySelector('#upload-select-image');
+const uploadFormSubmit = uploadImageForm.querySelector('#upload-submit');
 const hashtagInput = uploadImageForm.querySelector('.text__hashtags');
 const commentTextarea = uploadImageForm.querySelector('.text__description');
 const errorTextBlock = document.querySelector('.img-upload__field-wrapper');
@@ -82,11 +86,26 @@ const validateComment = (value) => {
   return true;
 };
 
+const blockSubmitButton = (isActive = true) => {
+  if (isActive) {
+    uploadFormSubmit.textContent = 'Отправляю...';
+    uploadFormSubmit.setAttribute('disabled', '');
+  } else {
+    uploadFormSubmit.removeAttribute('disabled');
+    uploadFormSubmit.textContent = 'Опубликовать';
+  }
+};
+
 const onFormSubmit = (evt) => {
+  evt.preventDefault();
   const isValid = pristine.validate();
 
-  if (!isValid) {
-    evt.preventDefault();
+  if (isValid) {
+    blockSubmitButton();
+    sendData(new FormData(uploadImageForm), onUploadFail, onUploadSuccess, () => {
+      setInitialFeatures();
+      uploadImageForm.reset();
+    });
   }
 };
 
@@ -102,6 +121,7 @@ const cancelValidate = () => {
 
 export {
   validateUploadForm,
-  cancelValidate
+  cancelValidate,
+  blockSubmitButton
 };
 
