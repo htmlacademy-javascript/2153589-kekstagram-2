@@ -5,6 +5,7 @@ const errorDownloadTemplate = document.querySelector('#data-error').content.quer
 const errorUploadTemplate = document.querySelector('#error').content.querySelector('.error');
 const successUploadTemplate = document.querySelector('#success').content.querySelector('.success');
 
+const REMOVE_NOTIFICATION_TIMEOUT = 5000;
 const errorDownloadElement = createNotificationNode(errorDownloadTemplate);
 const errorUploadElement = createNotificationNode(errorUploadTemplate);
 const successUploadElement = createNotificationNode(successUploadTemplate);
@@ -13,7 +14,7 @@ const renderDownloadNotification = (element) => {
   document.body.append(element);
   setTimeout(() => {
     element.remove();
-  }, 5000);
+  }, REMOVE_NOTIFICATION_TIMEOUT);
 };
 
 const closeUploadNotification = () => {
