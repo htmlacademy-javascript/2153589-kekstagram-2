@@ -1,5 +1,4 @@
 import { transformArrayToObject } from './util.js';
-// import { generatePhotosList } from './data.js';
 import { getData } from './api.js';
 import { renderGallery } from './gallery.js';
 import { renderPreview } from './picture-detail.js';
