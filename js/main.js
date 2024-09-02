@@ -9,10 +9,12 @@ import { onDownloadFail } from './notifications.js';
 
 (async () => {
   const pictures = await getData(onDownloadFail);
+
   if (pictures) {
     renderGallery(pictures);
     renderPreview(transformArrayToObject(pictures));
   }
+
   initUploadForm();
   hideSlider();
   validateUploadForm();
