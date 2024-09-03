@@ -88,28 +88,35 @@ const validateComment = (value) => {
   return true;
 };
 
-const blockSubmitButton = (isActive = true) => {
-  if (isActive) {
-    uploadFormSubmit.textContent = 'Отправляю...';
-    uploadFormSubmit.setAttribute('disabled', '');
-  } else {
-    uploadFormSubmit.removeAttribute('disabled');
-    uploadFormSubmit.textContent = 'Опубликовать';
-  }
+const blockSubmitButton = () => {
+  uploadFormSubmit.textContent = 'Отправляю...';
+  uploadFormSubmit.setAttribute('disabled', '');
 };
 
-const onFormSubmit = (evt) => {
+const unblockSubmitButton = () => {
+  uploadFormSubmit.removeAttribute('disabled');
+  uploadFormSubmit.textContent = 'Опубликовать';
+};
+
+const onFormSubmit = async (evt) => {
   evt.preventDefault();
   const isValid = pristine.validate();
 
   if (isValid) {
     blockSubmitButton();
-    sendData(new FormData(uploadImageForm), onUploadFail, onUploadSuccess, () => {
+    try {
+      await sendData(new FormData(evt.target));
+      onUploadSuccess();
       setInitialFeatures();
       resetScale(previewImage, scaleControlValueInput);
       hashtagInput.value = '';
       commentTextarea.value = '';
-    });
+    } catch (err) {
+      onUploadFail();
+    } finally {
+      unblockSubmitButton();
+    }
+
   }
 };
 

@@ -8,13 +8,13 @@ import { hideSlider } from './image-effects.js';
 import { onDownloadFail } from './notifications.js';
 
 (async () => {
-  const pictures = await getData(onDownloadFail);
-
-  if (pictures) {
+  try {
+    const pictures = await getData(onDownloadFail);
     renderGallery(pictures);
     renderPreview(transformArrayToObject(pictures));
+  } catch (err) {
+    onDownloadFail();
   }
-
   initUploadForm();
   hideSlider();
   validateUploadForm();

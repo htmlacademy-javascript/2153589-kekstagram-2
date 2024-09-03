@@ -1,14 +1,14 @@
-import { createNotificationNode, isEscapeKeydown } from './util.js';
-import { blockSubmitButton } from './validate-form.js';
+import { isEscapeKeydown } from './util.js';
+
+const REMOVE_NOTIFICATION_TIMEOUT = 5000;
 
 const errorDownloadTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
 const errorUploadTemplate = document.querySelector('#error').content.querySelector('.error');
 const successUploadTemplate = document.querySelector('#success').content.querySelector('.success');
 
-const REMOVE_NOTIFICATION_TIMEOUT = 5000;
-const errorDownloadElement = createNotificationNode(errorDownloadTemplate);
-const errorUploadElement = createNotificationNode(errorUploadTemplate);
-const successUploadElement = createNotificationNode(successUploadTemplate);
+const errorDownloadElement = errorDownloadTemplate.cloneNode(true);
+const errorUploadElement = errorUploadTemplate.cloneNode(true);
+const successUploadElement = successUploadTemplate.cloneNode(true);
 
 const renderDownloadNotification = (element) => {
   document.body.append(element);
@@ -17,48 +17,30 @@ const renderDownloadNotification = (element) => {
   }, REMOVE_NOTIFICATION_TIMEOUT);
 };
 
-const closeUploadNotification = () => {
-  const element = document.querySelector('.success') || document.querySelector('.error');
-
-  if (!element) {
-    return;
-  }
-
-  element.querySelector('button').removeEventListener('click', onButtonClick);
-  element.removeEventListener('click', onModalClick);
-  document.removeEventListener('keydown', onDocumentEscapeKeydown);
-  blockSubmitButton(false);
-  element.remove();
-};
-
 const openUploadNotification = (element) => {
   document.body.append(element);
-  element.querySelector('button').addEventListener('click', onButtonClick);
-  element.addEventListener('click', onModalClick);
+
+  const close = () => {
+    document.removeEventListener('keydown', onDocumentEscapeKeydown);
+    element.remove();
+  };
+
+  function onDocumentEscapeKeydown(evt) {
+    evt.preventDefault();
+
+    if (isEscapeKeydown(evt)) {
+      close();
+    }
+  }
+  element.querySelector('button')?.addEventListener('click', () => close());
+  element.addEventListener('click', function (evt) {
+    if (evt.target === this) {
+      close();
+    }
+  }
+  );
   document.addEventListener('keydown', onDocumentEscapeKeydown);
 };
-
-
-function onDocumentEscapeKeydown(evt) {
-  evt.preventDefault();
-
-  if (isEscapeKeydown(evt)) {
-    closeUploadNotification();
-  }
-}
-
-
-function onModalClick(evt) {
-  if (evt.target.className !== 'success' && evt.target.className !== 'error') {
-    return;
-  }
-
-  closeUploadNotification();
-}
-
-function onButtonClick() {
-  closeUploadNotification();
-}
 
 const onDownloadFail = () => renderDownloadNotification(errorDownloadElement);
 const onUploadFail = () => openUploadNotification(errorUploadElement);

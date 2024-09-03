@@ -10,7 +10,7 @@ const METHOD = {
   POST: 'POST',
 };
 
-const load = async (route, onFail, onSuccess = null, method = METHOD.GET, body = null, resetData = null) => {
+const load = async (route, method = METHOD.GET, body = null) => {
   try {
     const response = await fetch(`${BASE_URL}${route}`, {
       method,
@@ -18,25 +18,17 @@ const load = async (route, onFail, onSuccess = null, method = METHOD.GET, body =
     });
 
     if (!response.ok) {
-      onFail();
-      return;
+      throw new Error('Ошибка получения данных с сервера!');
     }
 
-    const data = await response.json();
-
-    if (onSuccess) {
-      onSuccess();
-      resetData();
-    }
-
-    return data;
+    return await response.json();
   } catch (err) {
-    onFail();
+    throw new Error('Отсутствует соединение с сервером!');
   }
 };
 
-const getData = (onFail) => load(ROUTE.GET_DATA, onFail);
+const getData = () => load(ROUTE.GET_DATA);
 
-const sendData = (body, onFail, onSuccess, resetData) => load(ROUTE.SEND_DATA, onFail, onSuccess, METHOD.POST, body, resetData);
+const sendData = (body) => load(ROUTE.SEND_DATA, METHOD.POST, body);
 
 export { getData, sendData };

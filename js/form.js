@@ -16,10 +16,10 @@ const previewImage = document.querySelector('.img-upload__preview img');
 const effectButtons = document.querySelectorAll('.effects__radio');
 
 const onButtonBiggerClick = () => {
-  increaseImage(scaleControlValueInput, previewImage);
+  scaleControlValueInput.value = `${increaseImage(scaleControlValueInput, previewImage)}%`;
 };
 const onButtonSmallerClick = () => {
-  decreaseImage(scaleControlValueInput, previewImage);
+  scaleControlValueInput.value = `${decreaseImage(scaleControlValueInput, previewImage)}%`;
 };
 
 const closeUploadForm = () => {

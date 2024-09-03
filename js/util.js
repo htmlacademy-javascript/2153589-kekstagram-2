@@ -17,14 +17,11 @@ const resetScale = (elem, input, value = '100%') => {
   }
 };
 
-const createNotificationNode = (element) => element.cloneNode(true);
-
 export {
   transformArrayToObject,
   isEscapeKeydown,
   hasDuplicates,
-  resetScale,
-  createNotificationNode
+  resetScale
 };
 
 
