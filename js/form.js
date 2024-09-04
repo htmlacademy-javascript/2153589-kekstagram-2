@@ -25,7 +25,6 @@ const onButtonSmallerClick = () => {
 const closeUploadForm = () => {
   imageUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  // imageUploadInput.value = '';
   cancelValidate();
   imageUploadCancel.removeEventListener('click', onButtonResetClick);
   document.removeEventListener('keydown', onDocumentEscapeKeydown);
