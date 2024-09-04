@@ -1,6 +1,11 @@
 import { hasDuplicates } from './util.js';
+import { sendData } from './api.js';
+import { onUploadFail, onUploadSuccess } from './notifications.js';
+import { closeUploadForm } from './form.js';
+
 
 const uploadImageForm = document.querySelector('#upload-select-image');
+const uploadFormSubmit = uploadImageForm.querySelector('#upload-submit');
 const hashtagInput = uploadImageForm.querySelector('.text__hashtags');
 const commentTextarea = uploadImageForm.querySelector('.text__description');
 const errorTextBlock = document.querySelector('.img-upload__field-wrapper');
@@ -82,11 +87,32 @@ const validateComment = (value) => {
   return true;
 };
 
-const onFormSubmit = (evt) => {
+const blockSubmitButton = () => {
+  uploadFormSubmit.textContent = 'Отправляю...';
+  uploadFormSubmit.setAttribute('disabled', '');
+};
+
+const unblockSubmitButton = () => {
+  uploadFormSubmit.removeAttribute('disabled');
+  uploadFormSubmit.textContent = 'Опубликовать';
+};
+
+const onFormSubmit = async (evt) => {
+  evt.preventDefault();
   const isValid = pristine.validate();
 
-  if (!isValid) {
-    evt.preventDefault();
+  if (isValid) {
+    blockSubmitButton();
+    try {
+      await sendData(new FormData(evt.target));
+      onUploadSuccess();
+      closeUploadForm();
+    } catch (err) {
+      onUploadFail();
+    } finally {
+      unblockSubmitButton();
+    }
+
   }
 };
 
@@ -102,6 +128,7 @@ const cancelValidate = () => {
 
 export {
   validateUploadForm,
-  cancelValidate
+  cancelValidate,
+  blockSubmitButton
 };
 

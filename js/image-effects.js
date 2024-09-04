@@ -134,7 +134,8 @@ const deleteRadioListeners = (elements) => {
 export {
   setInitialFeatures,
   setRadioListeners,
-  deleteRadioListeners
+  deleteRadioListeners,
+  hideSlider
 };
 
 

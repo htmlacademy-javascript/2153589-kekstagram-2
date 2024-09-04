@@ -16,16 +16,15 @@ const previewImage = document.querySelector('.img-upload__preview img');
 const effectButtons = document.querySelectorAll('.effects__radio');
 
 const onButtonBiggerClick = () => {
-  increaseImage(scaleControlValueInput, previewImage);
+  scaleControlValueInput.value = `${increaseImage(scaleControlValueInput, previewImage)}%`;
 };
 const onButtonSmallerClick = () => {
-  decreaseImage(scaleControlValueInput, previewImage);
+  scaleControlValueInput.value = `${decreaseImage(scaleControlValueInput, previewImage)}%`;
 };
 
 const closeUploadForm = () => {
   imageUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  imageUploadInput.value = '';
   cancelValidate();
   imageUploadCancel.removeEventListener('click', onButtonResetClick);
   document.removeEventListener('keydown', onDocumentEscapeKeydown);
@@ -34,6 +33,8 @@ const closeUploadForm = () => {
   scaleControlBiggerButton.removeEventListener('click', onButtonBiggerClick);
   deleteRadioListeners(effectButtons);
   resetScale(previewImage, scaleControlValueInput);
+  setInitialFeatures();
+  uploadForm.reset();
 };
 
 const openUploadForm = () => {
@@ -44,7 +45,6 @@ const openUploadForm = () => {
   hashtagInput.addEventListener('input', onHashtagInputEvent);
   scaleControlSmallerButton.addEventListener('click', onButtonSmallerClick);
   scaleControlBiggerButton.addEventListener('click', onButtonBiggerClick);
-  setInitialFeatures();
   setRadioListeners(effectButtons);
 };
 
@@ -82,7 +82,8 @@ function onHashtagInputEvent() {
 const initUploadForm = () => imageUploadInput.addEventListener('change', openUploadForm);
 
 export {
-  initUploadForm
+  initUploadForm,
+  closeUploadForm
 };
 
 
