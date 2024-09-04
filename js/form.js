@@ -25,7 +25,7 @@ const onButtonSmallerClick = () => {
 const closeUploadForm = () => {
   imageUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  imageUploadInput.value = '';
+  // imageUploadInput.value = '';
   cancelValidate();
   imageUploadCancel.removeEventListener('click', onButtonResetClick);
   document.removeEventListener('keydown', onDocumentEscapeKeydown);
@@ -35,6 +35,7 @@ const closeUploadForm = () => {
   deleteRadioListeners(effectButtons);
   resetScale(previewImage, scaleControlValueInput);
   setInitialFeatures();
+  uploadForm.reset();
 };
 
 const openUploadForm = () => {
@@ -82,7 +83,8 @@ function onHashtagInputEvent() {
 const initUploadForm = () => imageUploadInput.addEventListener('change', openUploadForm);
 
 export {
-  initUploadForm
+  initUploadForm,
+  closeUploadForm
 };
 
 

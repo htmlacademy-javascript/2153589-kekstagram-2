@@ -1,15 +1,14 @@
-import { hasDuplicates, resetScale } from './util.js';
+import { hasDuplicates } from './util.js';
 import { sendData } from './api.js';
 import { onUploadFail, onUploadSuccess } from './notifications.js';
-import { setInitialFeatures } from './image-effects.js';
+import { closeUploadForm } from './form.js';
+
 
 const uploadImageForm = document.querySelector('#upload-select-image');
 const uploadFormSubmit = uploadImageForm.querySelector('#upload-submit');
 const hashtagInput = uploadImageForm.querySelector('.text__hashtags');
 const commentTextarea = uploadImageForm.querySelector('.text__description');
 const errorTextBlock = document.querySelector('.img-upload__field-wrapper');
-const scaleControlValueInput = document.querySelector('.scale__control--value');
-const previewImage = document.querySelector('.img-upload__preview img');
 
 const COMMENT_MAX_LENGTH = 140;
 const HASHTAG_MAX_COUNT = 5;
@@ -107,10 +106,7 @@ const onFormSubmit = async (evt) => {
     try {
       await sendData(new FormData(evt.target));
       onUploadSuccess();
-      setInitialFeatures();
-      resetScale(previewImage, scaleControlValueInput);
-      hashtagInput.value = '';
-      commentTextarea.value = '';
+      closeUploadForm();
     } catch (err) {
       onUploadFail();
     } finally {
