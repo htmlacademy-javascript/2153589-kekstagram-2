@@ -1,12 +1,15 @@
-// Функция - генерация объекта из массива
 const transformArrayToObject = (array) =>
   array.reduce((obj, item) => {
     obj[item.id] = item;
     return obj;
   }, {});
 
-// Функция проверки на  дубликаты в массиве
 const hasDuplicates = (arr) => arr.length !== new Set(arr).size;
+
+function getRandomSetElement(collection) {
+  const values = Array.from(collection.values());
+  return values[Math.floor(Math.random() * values.length)];
+}
 
 const isEscapeKeydown = (evt) => evt.key === 'Escape';
 
@@ -17,11 +20,21 @@ const resetScale = (elem, input, value = '100%') => {
   }
 };
 
+const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
 export {
   transformArrayToObject,
   isEscapeKeydown,
   hasDuplicates,
-  resetScale
+  getRandomSetElement,
+  resetScale,
+  debounce
 };
 
 

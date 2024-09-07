@@ -1,5 +1,7 @@
 const pictures = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const picturesTitle = document.querySelector('.pictures__title');
+const imageUploadSection = document.querySelector('.img-upload');
 
 const renderGallery = (pictureList) => {
   const pictureFragment = document.createDocumentFragment();
@@ -17,7 +19,7 @@ const renderGallery = (pictureList) => {
 
     pictureFragment.append(pictureClone);
   });
-
+  pictures.replaceChildren(picturesTitle, imageUploadSection);
   pictures.append(pictureFragment);
 };
 
