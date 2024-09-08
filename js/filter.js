@@ -5,7 +5,7 @@ const imageFiltersButtons = document.querySelectorAll('.img-filters__button');
 
 const RANDOM_SIZE = 10;
 const ACTIVE_BUTTON_CLASS = 'img-filters__button--active';
-const OPTIONS = {
+const FILTER = {
   DEFAULT: 'filter-default',
   RANDOM: 'filter-random',
   DISCUSSED: 'filter-discussed'
@@ -39,7 +39,7 @@ const setFilters = (pictures, cb) => {
   imageFiltersContainer.classList.remove('img-filters--inactive');
   imageFiltersContainer.addEventListener('click', (evt) => {
 
-    if (!Object.values(OPTIONS).includes(evt.target.id)) {
+    if (!Object.values(FILTER).includes(evt.target.id)) {
       return;
     }
 
@@ -50,10 +50,10 @@ const setFilters = (pictures, cb) => {
     changeActive(evt.target);
 
     switch (evt.target.id) {
-      case OPTIONS.RANDOM:
+      case FILTER.RANDOM:
         cb(getRandomElements(pictures), removeElements);
         return;
-      case OPTIONS.DISCUSSED:
+      case FILTER.DISCUSSED:
         cb(getSortedElements(pictures), removeElements);
         return;
       default:
