@@ -4,6 +4,7 @@ const imageFiltersContainer = document.querySelector('.img-filters');
 const imageFiltersButtons = document.querySelectorAll('.img-filters__button');
 
 const RANDOM_SIZE = 10;
+const ACTIVE_BUTTON_CLASS = 'img-filters__button--active';
 const OPTIONS = {
   DEFAULT: 'filter-default',
   RANDOM: 'filter-random',
@@ -22,9 +23,9 @@ const getSortedElements = (elements) => elements.slice().sort((a, b) => b.commen
 
 const changeActive = (targetElement) => {
   imageFiltersButtons.forEach((button) => {
-    button.classList.remove('img-filters__button--active');
+    button.classList.remove(ACTIVE_BUTTON_CLASS);
   });
-  targetElement.classList.add('img-filters__button--active');
+  targetElement.classList.add(ACTIVE_BUTTON_CLASS);
 };
 
 const removeElements = () => {
@@ -39,6 +40,10 @@ const setFilters = (pictures, cb) => {
   imageFiltersContainer.addEventListener('click', (evt) => {
 
     if (!Object.values(OPTIONS).includes(evt.target.id)) {
+      return;
+    }
+
+    if (evt.target.classList.contains(ACTIVE_BUTTON_CLASS)) {
       return;
     }
 
