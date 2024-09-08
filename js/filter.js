@@ -1,4 +1,4 @@
-import { shuffleArray } from './util.js';
+import { debounce, shuffleArray } from './util.js';
 
 const imageFiltersContainer = document.querySelector('.img-filters');
 const imageFiltersButtons = document.querySelectorAll('.img-filters__button');
@@ -21,7 +21,7 @@ const getRandomElements = (elementsArray) => {
 
 const getSortedElements = (elements) => elements.slice().sort((a, b) => b.comments.length - a.comments.length);
 
-const changeActive = (targetElement) => {
+const changeActiveButton = (targetElement) => {
   imageFiltersButtons.forEach((button) => {
     button.classList.remove(ACTIVE_BUTTON_CLASS);
   });
@@ -35,11 +35,28 @@ const removeElements = () => {
   });
 };
 
+const pickFilter = debounce((pictures, id, cb) => {
+  removeElements();
+  switch (id) {
+    case FILTER.RANDOM:
+      cb(getRandomElements(pictures));
+      return;
+    case FILTER.DISCUSSED:
+      cb(getSortedElements(pictures));
+      return;
+    case FILTER.DEFAULT:
+      cb(pictures);
+      return;
+    default:
+      throw new Error(`Unknown filter id: ${id}`);
+  }
+});
+
 const setFilters = (pictures, cb) => {
   imageFiltersContainer.classList.remove('img-filters--inactive');
   imageFiltersContainer.addEventListener('click', (evt) => {
 
-    if (!Object.values(FILTER).includes(evt.target.id)) {
+    if (!evt.target.id) {
       return;
     }
 
@@ -47,18 +64,8 @@ const setFilters = (pictures, cb) => {
       return;
     }
 
-    changeActive(evt.target);
-
-    switch (evt.target.id) {
-      case FILTER.RANDOM:
-        cb(getRandomElements(pictures), removeElements);
-        return;
-      case FILTER.DISCUSSED:
-        cb(getSortedElements(pictures), removeElements);
-        return;
-      default:
-        cb(pictures, removeElements);
-    }
+    changeActiveButton(evt.target);
+    pickFilter(pictures, evt.target.id, cb);
   });
 };
 
