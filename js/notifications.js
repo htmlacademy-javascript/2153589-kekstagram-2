@@ -43,7 +43,14 @@ const openUploadNotification = (element) => {
 };
 
 const onDownloadFail = () => renderDownloadNotification(errorDownloadElement);
-const onUploadFail = () => openUploadNotification(errorUploadElement);
+const onUploadFail = (message = null) => {
+  openUploadNotification(errorUploadElement);
+  const errorBlock = document.querySelector('.error__title');
+
+  if (message && errorBlock) {
+    errorBlock.textContent = message;
+  }
+};
 const onUploadSuccess = () => openUploadNotification(successUploadElement);
 
 export {

@@ -2,6 +2,10 @@ import { isEscapeKeydown, resetScale } from './util.js';
 import { cancelValidate } from './validate-form.js';
 import { increaseImage, decreaseImage } from './scale-image.js';
 import { setRadioListeners, deleteRadioListeners, setInitialFeatures } from './image-effects.js';
+import { onUploadFail } from './notifications.js';
+
+const fileExtensions = ['jpeg', 'jpg', 'png', 'gif', 'webp'];
+let imageBlobUrl = '';
 
 const imageUploadInput = document.querySelector('.img-upload__input');
 const imageUploadOverlay = document.querySelector('.img-upload__overlay');
@@ -13,7 +17,23 @@ const scaleControlSmallerButton = document.querySelector('.scale__control--small
 const scaleControlBiggerButton = document.querySelector('.scale__control--bigger');
 const scaleControlValueInput = document.querySelector('.scale__control--value');
 const previewImage = document.querySelector('.img-upload__preview img');
+const previewImageThumbnails = document.querySelectorAll('.effects__preview');
 const effectButtons = document.querySelectorAll('.effects__radio');
+
+const uploadImage = () => {
+  const file = imageUploadInput.files[0];
+  const extName = file?.name.toLowerCase().split('.').pop();
+
+  if (!fileExtensions.includes(extName)) {
+    throw new Error('Не правильно выбран формат файла');
+  }
+
+  imageBlobUrl = URL.createObjectURL(file);
+  previewImage.src = imageBlobUrl;
+  previewImageThumbnails.forEach((element) => {
+    element.style.backgroundImage = `url(${imageBlobUrl})`;
+  });
+};
 
 const onButtonBiggerClick = () => {
   scaleControlValueInput.value = `${increaseImage(scaleControlValueInput, previewImage)}%`;
@@ -32,6 +52,7 @@ const closeUploadForm = () => {
   scaleControlSmallerButton.removeEventListener('click', onButtonSmallerClick);
   scaleControlBiggerButton.removeEventListener('click', onButtonBiggerClick);
   deleteRadioListeners(effectButtons);
+  URL.revokeObjectURL(imageBlobUrl);
   resetScale(previewImage, scaleControlValueInput);
   setInitialFeatures();
   uploadForm.reset();
@@ -79,7 +100,14 @@ function onHashtagInputEvent() {
   limitHashtagSpaces();
 }
 
-const initUploadForm = () => imageUploadInput.addEventListener('change', openUploadForm);
+const initUploadForm = () => imageUploadInput.addEventListener('change', () => {
+  try {
+    uploadImage();
+    openUploadForm();
+  } catch (err) {
+    onUploadFail(err.message);
+  }
+});
 
 export {
   initUploadForm,
