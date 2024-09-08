@@ -1,3 +1,5 @@
+const RERENDER_DELAY = 500;
+
 const transformArrayToObject = (array) =>
   array.reduce((obj, item) => {
     obj[item.id] = item;
@@ -6,10 +8,14 @@ const transformArrayToObject = (array) =>
 
 const hasDuplicates = (arr) => arr.length !== new Set(arr).size;
 
-function getRandomSetElement(collection) {
-  const values = Array.from(collection.values());
-  return values[Math.floor(Math.random() * values.length)];
-}
+const shuffleArray = (arr) => {
+  let i = arr.length;
+  while (--i > 0) {
+    const randIndex = Math.floor(Math.random() * (i + 1));
+    [arr[randIndex], arr[i]] = [arr[i], arr[randIndex]];
+  }
+  return arr;
+};
 
 const isEscapeKeydown = (evt) => evt.key === 'Escape';
 
@@ -20,7 +26,7 @@ const resetScale = (elem, input, value = '100%') => {
   }
 };
 
-const debounce = (callback, timeoutDelay) => {
+const debounce = (callback, timeoutDelay = RERENDER_DELAY) => {
   let timeoutId;
   return (...rest) => {
     clearTimeout(timeoutId);
@@ -32,8 +38,8 @@ export {
   transformArrayToObject,
   isEscapeKeydown,
   hasDuplicates,
-  getRandomSetElement,
   resetScale,
+  shuffleArray,
   debounce
 };
 

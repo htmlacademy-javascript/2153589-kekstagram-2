@@ -1,4 +1,4 @@
-import { transformArrayToObject } from './util.js';
+import { transformArrayToObject, debounce } from './util.js';
 import { getData } from './api.js';
 import { renderGallery } from './gallery.js';
 import { renderPreview } from './picture-detail.js';
@@ -12,7 +12,7 @@ import { setFilters } from './filter.js';
   try {
     const pictures = await getData(onDownloadFail);
     renderGallery(pictures);
-    setFilters(pictures, renderGallery);
+    setFilters(pictures, debounce(renderGallery));
     renderPreview(transformArrayToObject(pictures));
   } catch (err) {
     onDownloadFail();

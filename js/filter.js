@@ -1,33 +1,24 @@
-import { getRandomSetElement, debounce } from './util.js';
+import { shuffleArray } from './util.js';
 
 const imageFiltersContainer = document.querySelector('.img-filters');
 const imageFiltersButtons = document.querySelectorAll('.img-filters__button');
 
-const RERENDER_DELAY = 500;
 const RANDOM_SIZE = 10;
 const OPTIONS = {
+  DEFAULT: 'filter-default',
   RANDOM: 'filter-random',
   DISCUSSED: 'filter-discussed'
 };
 
 const getRandomElements = (elementsArray) => {
   const elementsSet = new Set(elementsArray);
-  const randomElementsSet = new Set();
   const maxSize = Math.min(RANDOM_SIZE, elementsSet.size);
+  const returnedElements = shuffleArray(Array.from(elementsSet));
 
-  while (randomElementsSet.size < maxSize) {
-    const newElement = getRandomSetElement(elementsSet);
-    randomElementsSet.add(newElement);
-  }
-
-  return randomElementsSet;
+  return returnedElements.slice(0, maxSize);
 };
 
-const getSortedElements = (elements) => {
-  const sortedElements = elements.slice().sort((elementA, elementB) => elementB?.comments.length - elementA?.comments.length);
-
-  return sortedElements;
-};
+const getSortedElements = (elements) => elements.slice().sort((a, b) => b.comments.length - a.comments.length);
 
 const changeActive = (targetElement) => {
   imageFiltersButtons.forEach((button) => {
@@ -36,27 +27,33 @@ const changeActive = (targetElement) => {
   targetElement.classList.add('img-filters__button--active');
 };
 
+const removeElements = () => {
+  const pictureElements = document.querySelectorAll('.picture');
+  pictureElements.forEach((elem) => {
+    elem.remove();
+  });
+};
+
 const setFilters = (pictures, cb) => {
-  const onDefaultButtonClick = debounce(() => cb(pictures), RERENDER_DELAY);
-  const onRandomButtonClick = debounce(() => cb(getRandomElements(pictures)), RERENDER_DELAY);
-  const onSortedButtonClick = debounce(() => cb(getSortedElements(pictures)), RERENDER_DELAY);
-
   imageFiltersContainer.classList.remove('img-filters--inactive');
-  imageFiltersButtons.forEach((element) => {
-    element.addEventListener('click', (evt) => {
-      changeActive(evt.target);
-      if (evt.target.getAttribute('id') === OPTIONS.RANDOM) {
-        onRandomButtonClick();
-        return;
-      }
+  imageFiltersContainer.addEventListener('click', (evt) => {
 
-      if (evt.target.getAttribute('id') === OPTIONS.DISCUSSED) {
-        onSortedButtonClick();
-        return;
-      }
+    if (!Object.values(OPTIONS).includes(evt.target.id)) {
+      return;
+    }
 
-      onDefaultButtonClick();
-    });
+    changeActive(evt.target);
+
+    switch (evt.target.id) {
+      case OPTIONS.RANDOM:
+        cb(getRandomElements(pictures), removeElements);
+        return;
+      case OPTIONS.DISCUSSED:
+        cb(getSortedElements(pictures), removeElements);
+        return;
+      default:
+        cb(pictures, removeElements);
+    }
   });
 };
 
