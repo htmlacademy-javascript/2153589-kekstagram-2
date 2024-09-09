@@ -2,28 +2,15 @@ import { hasDuplicates } from './util.js';
 import { sendData } from './api.js';
 import { onUploadFail, onUploadSuccess } from './notifications.js';
 import { closeUploadForm } from './form.js';
+import { VALIDATE, VALIDATE_ERROR_TYPES, PREVIEW } from './constants.js';
 
+let errorId = null;
 
 const uploadImageForm = document.querySelector('#upload-select-image');
 const uploadFormSubmit = uploadImageForm.querySelector('#upload-submit');
 const hashtagInput = uploadImageForm.querySelector('.text__hashtags');
 const commentTextarea = uploadImageForm.querySelector('.text__description');
 const errorTextBlock = document.querySelector('.img-upload__field-wrapper');
-
-const COMMENT_MAX_LENGTH = 140;
-const HASHTAG_MAX_COUNT = 5;
-const regHashtag = /^#[a-zа-яё0-9]{1,19}$/i;
-const warningClass = 'img-upload__field-wrapper--warning';
-let errorId = null;
-
-
-const errorTypes = {
-  'invalidHashtag': 'введён невалидный хэштег',
-  'onlyHash': 'после символа # должна быть буква или цифра',
-  'manyHashtags': 'превышено количество хэштегов',
-  'repeatHashtag': 'хэштеги повторяются',
-  'longComment': `длина комментария больше ${COMMENT_MAX_LENGTH} символов`
-};
 
 const pristine = new Pristine(uploadImageForm, {
   classTo: 'img-upload__field-wrapper',
@@ -32,13 +19,13 @@ const pristine = new Pristine(uploadImageForm, {
   errorTextTag: 'div'
 });
 
-const getHashtagErrorMessage = () => errorTypes[errorId];
+const getHashtagErrorMessage = () => VALIDATE_ERROR_TYPES[errorId];
 
 const renderWarning = (isActive) => {
   if (isActive) {
-    errorTextBlock.classList.add(warningClass);
+    errorTextBlock.classList.add(VALIDATE.WARNING_CLASS);
   } else {
-    errorTextBlock.classList.remove(warningClass);
+    errorTextBlock.classList.remove(VALIDATE.WARNING_CLASS);
   }
 };
 
@@ -50,9 +37,9 @@ const validateHashtag = (value) => {
   }
 
   const valueToArray = value.toLowerCase().split(' ').filter((item) => item !== '');
-  const isValidHashtag = valueToArray.every((item) => regHashtag.test(item));
+  const isValidHashtag = valueToArray.every((item) => VALIDATE.HASHTAG_REGEX.test(item));
 
-  if ((value.match(/#/g) || []).length > HASHTAG_MAX_COUNT) {
+  if ((value.match(/#/g) || []).length > VALIDATE.HASHTAG_MAX_COUNT) {
     errorId = 'manyHashtags';
     return false;
   }
@@ -79,7 +66,7 @@ const validateHashtag = (value) => {
 };
 
 const validateComment = (value) => {
-  if (value.length > COMMENT_MAX_LENGTH) {
+  if (value.length > VALIDATE.COMMENT_MAX_LENGTH) {
     errorId = 'longComment';
     return false;
   }
@@ -88,13 +75,13 @@ const validateComment = (value) => {
 };
 
 const blockSubmitButton = () => {
-  uploadFormSubmit.textContent = 'Отправляю...';
+  uploadFormSubmit.textContent = PREVIEW.BUTTON_SIGN.PROCESS;
   uploadFormSubmit.setAttribute('disabled', '');
 };
 
 const unblockSubmitButton = () => {
   uploadFormSubmit.removeAttribute('disabled');
-  uploadFormSubmit.textContent = 'Опубликовать';
+  uploadFormSubmit.textContent = PREVIEW.BUTTON_SIGN.INITIAL;
 };
 
 const onFormSubmit = async (evt) => {

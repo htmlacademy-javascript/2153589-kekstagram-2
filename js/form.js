@@ -3,8 +3,8 @@ import { cancelValidate } from './validate-form.js';
 import { increaseImage, decreaseImage } from './scale-image.js';
 import { setRadioListeners, deleteRadioListeners, setInitialFeatures } from './image-effects.js';
 import { onUploadFail } from './notifications.js';
+import { PREVIEW, NOTIFICATON } from './constants.js';
 
-const fileExtensions = ['jpeg', 'jpg', 'png', 'gif', 'webp'];
 let imageBlobUrl = '';
 
 const imageUploadInput = document.querySelector('.img-upload__input');
@@ -24,8 +24,8 @@ const uploadImage = () => {
   const file = imageUploadInput.files[0];
   const extName = file?.name.toLowerCase().split('.').pop();
 
-  if (!fileExtensions.includes(extName)) {
-    throw new Error('Не правильно выбран формат файла');
+  if (!PREVIEW.FILE_UPLOAD_TYPES.includes(extName)) {
+    throw new Error(NOTIFICATON.MESSAGE.WRONG_FILE_EXTENSION);
   }
 
   imageBlobUrl = URL.createObjectURL(file);

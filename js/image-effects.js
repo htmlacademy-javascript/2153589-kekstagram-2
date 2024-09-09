@@ -1,4 +1,5 @@
 import { resetScale } from './util.js';
+import { PREVIEW } from './constants.js';
 
 const effectLevelInput = document.querySelector('.effect-level__value');
 const previewImage = document.querySelector('.img-upload__preview img');
@@ -7,44 +8,6 @@ const sliderElementContainer = document.querySelector('.img-upload__effect-level
 const scaleControlValueInput = document.querySelector('.scale__control--value');
 
 let currentEffect = 'none';
-
-const EFFECTS = {
-  chrome: {
-    min: 0,
-    max: 1,
-    start: 1,
-    step: 0.1,
-    getEffect: (value) => `grayscale(${value})`
-  },
-  sepia: {
-    min: 0,
-    max: 1,
-    start: 1,
-    step: 0.1,
-    getEffect: (value) => `sepia(${value})`
-  },
-  marvin: {
-    min: 0,
-    max: 100,
-    start: 100,
-    step: 1,
-    getEffect: (value) => `invert(${value}%)`
-  },
-  phobos: {
-    min: 0,
-    max: 3,
-    start: 3,
-    step: 0.1,
-    getEffect: (value) => `blur(${value}px)`
-  },
-  heat: {
-    min: 1,
-    max: 3,
-    start: 3,
-    step: 0.1,
-    getEffect: (value) => `brightness(${value})`
-  }
-};
 
 const hideSlider = (isActive = true) => {
   if (isActive) {
@@ -107,7 +70,7 @@ const onEffectButtonChange = (evt) => {
     return;
   }
 
-  const { min, max, step, start, getEffect } = EFFECTS[currentEffect];
+  const { min, max, step, start, getEffect } = PREVIEW.EFFECTS[currentEffect];
   hideSlider(false);
   changeSliderFeatures(min, max, step, start);
   createImageEffect(getEffect(start));
@@ -116,7 +79,7 @@ const onEffectButtonChange = (evt) => {
 
 sliderElement.noUiSlider.on('update', () => {
   effectLevelInput.value = sliderElement.noUiSlider.get();
-  createImageEffect(EFFECTS[currentEffect]?.getEffect(effectLevelInput.value));
+  createImageEffect(PREVIEW.EFFECTS[currentEffect]?.getEffect(effectLevelInput.value));
 });
 
 const setRadioListeners = (elements) => {

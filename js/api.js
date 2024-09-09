@@ -1,34 +1,24 @@
-const BASE_URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
+import { API, NOTIFICATON } from './constants.js';
 
-const ROUTE = {
-  GET_DATA: '/data',
-  SEND_DATA: '/',
-};
-
-const METHOD = {
-  GET: 'GET',
-  POST: 'POST',
-};
-
-const load = async (route, method = METHOD.GET, body = null) => {
+const load = async (route, method = API.METHOD.GET, body = null) => {
   try {
-    const response = await fetch(`${BASE_URL}${route}`, {
+    const response = await fetch(`${API.BASE_URL}${route}`, {
       method,
       body
     });
 
     if (!response.ok) {
-      throw new Error('Ошибка получения данных с сервера!');
+      throw new Error(NOTIFICATON.MESSAGE.NO_DATA_ERROR);
     }
 
     return await response.json();
   } catch (err) {
-    throw new Error('Отсутствует соединение с сервером!');
+    throw new Error(NOTIFICATON.MESSAGE.NO_CONNECTION);
   }
 };
 
-const getData = () => load(ROUTE.GET_DATA);
+const getData = () => load(API.ROUTE.GET_DATA);
 
-const sendData = (body) => load(ROUTE.SEND_DATA, METHOD.POST, body);
+const sendData = (body) => load(API.ROUTE.SEND_DATA, API.METHOD.POST, body);
 
 export { getData, sendData };
