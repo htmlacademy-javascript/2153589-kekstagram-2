@@ -1,6 +1,5 @@
 import { isEscapeKeydown } from './util.js';
-
-const REMOVE_NOTIFICATION_TIMEOUT = 5000;
+import { NOTIFICATON } from './constants.js';
 
 const errorDownloadTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
 const errorUploadTemplate = document.querySelector('#error').content.querySelector('.error');
@@ -14,7 +13,7 @@ const renderDownloadNotification = (element) => {
   document.body.append(element);
   setTimeout(() => {
     element.remove();
-  }, REMOVE_NOTIFICATION_TIMEOUT);
+  }, NOTIFICATON.REMOVE_TIMEOUT);
 };
 
 const openUploadNotification = (element) => {
@@ -43,7 +42,14 @@ const openUploadNotification = (element) => {
 };
 
 const onDownloadFail = () => renderDownloadNotification(errorDownloadElement);
-const onUploadFail = () => openUploadNotification(errorUploadElement);
+const onUploadFail = (message = null) => {
+  openUploadNotification(errorUploadElement);
+  const errorBlock = document.querySelector('.error__title');
+
+  if (errorBlock) {
+    errorBlock.textContent = message ? message : NOTIFICATON.MESSAGE.FAILED_FILE_UPLOAD;
+  }
+};
 const onUploadSuccess = () => openUploadNotification(successUploadElement);
 
 export {

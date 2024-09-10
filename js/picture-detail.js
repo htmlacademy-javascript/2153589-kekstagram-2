@@ -1,4 +1,5 @@
 import { isEscapeKeydown } from './util.js';
+import { PREVIEW } from './constants.js';
 
 const gallery = document.querySelector('.pictures');
 const closeButton = document.querySelector('.big-picture__cancel');
@@ -14,7 +15,6 @@ const commentsContainer = preview.querySelector('.social__comments');
 const commentTemplate = commentsContainer.querySelector('.social__comment');
 
 let comments = [];
-const COMMENTS_STEP = 5;
 
 // Функция по созданию комментария
 const createCommentNode = (comment) => {
@@ -57,7 +57,7 @@ const renderComments = () => {
   const prevLength = commentsContainer.children.length;
   commentCountContainer.classList.remove('hidden');
 
-  const end = (prevLength + COMMENTS_STEP) >= comments.length ? comments.length : prevLength + COMMENTS_STEP;
+  const end = (prevLength + PREVIEW.COMMENTS_STEP) >= comments.length ? comments.length : prevLength + PREVIEW.COMMENTS_STEP;
 
   createCommentList(prevLength, end);
   previewShownComments.textContent = commentsContainer.children.length;
