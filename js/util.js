@@ -1,20 +1,20 @@
 const RERENDER_DELAY = 500;
 
-const transformArrayToObject = (array) =>
-  array.reduce((obj, item) => {
+const transformArrayToObject = (elements) =>
+  elements.reduce((obj, item) => {
     obj[item.id] = item;
     return obj;
   }, {});
 
-const hasDuplicates = (arr) => arr.length !== new Set(arr).size;
+const hasDuplicates = (elements) => elements.length !== new Set(elements).size;
 
-const shuffleArray = (arr) => {
-  let i = arr.length;
+const shuffleArray = (elements) => {
+  let i = elements.length;
   while (--i > 0) {
     const randIndex = Math.floor(Math.random() * (i + 1));
-    [arr[randIndex], arr[i]] = [arr[i], arr[randIndex]];
+    [elements[randIndex], elements[i]] = [elements[i], elements[randIndex]];
   }
-  return arr;
+  return elements;
 };
 
 const isEscapeKeydown = (evt) => evt.key === 'Escape';

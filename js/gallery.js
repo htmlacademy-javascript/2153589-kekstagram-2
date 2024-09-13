@@ -1,9 +1,9 @@
 const pictures = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
-const renderGallery = (pictureList) => {
+const renderGallery = (photos) => {
   const pictureFragment = document.createDocumentFragment();
-  pictureList.forEach(({ id, url, description, likes, comments }) => {
+  photos.forEach(({ id, url, description, likes, comments }) => {
     const pictureClone = pictureTemplate.cloneNode(true);
     const image = pictureClone.querySelector('.picture__img');
 
