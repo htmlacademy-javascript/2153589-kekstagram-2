@@ -4,8 +4,8 @@ import { FILTER, NOTIFICATON } from './constants.js';
 const imageFiltersContainer = document.querySelector('.img-filters');
 const imageFiltersButtons = document.querySelectorAll('.img-filters__button');
 
-const getRandomElements = (elementsArray) => {
-  const elementsSet = new Set(elementsArray);
+const getRandomElements = (primaryElements) => {
+  const elementsSet = new Set(primaryElements);
   const maxSize = Math.min(FILTER.RANDOM_SIZE, elementsSet.size);
   const returnedElements = shuffleArray(Array.from(elementsSet));
 
